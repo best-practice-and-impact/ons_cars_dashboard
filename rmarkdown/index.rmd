@@ -1,0 +1,48 @@
+---
+title: "Coding in analysis and research response dashboard"
+output: 
+  html_document: 
+    css: "style.css"
+---
+
+```{r echo=FALSE, warning=FALSE}
+
+library(magrittr)
+
+data <- CARS::get_tidy_data_api()
+divisons <- filter_divisons(data)
+n_responses <- length(divisons)
+
+department_table <- data.frame(table(remove_low_counts(divisons)))
+
+```
+
+## Welcome
+
+Welcome to the Coding in Analysis and Research Survey (CARS) 2022 dashboard. Here you can see our response rate so far, broken down by ONS department. CARS is our annual survey on the use of code in government analysis. You can see the 2021 results in our [online publication](https://best-practice-and-impact.github.io/CARS-3/). 
+
+This year we hope to get over 1,000 responses. So far, we've got `r n_responses` responses. We're aiming for at least 20 from as many departments as possible, which will allow us to create customised reports for those departments. If you're interested in seeing this, please promote the survey in your department.
+
+
+## Responses by department
+
+```{r echo=FALSE, warnings=FALSE}
+
+if (nrow(department_table) == 0) {
+  knitr::raw_html("There aren't enough responses yet. Please check later - this page will update once per hour.")
+} else {
+  colnames(department_table) <- c("Department", "Number of respondents")
+
+  plot <- plot_freqs(department_table, xlab = "Department", ylab = "Number of respondents", n = n_responses, font_size = 14, height = 400 + 50 * nrow(department_table), width = 800)
+  
+  table <- kableExtra::kable_styling(knitr::kable(department_table)) %>% 
+    kableExtra::add_footnote(paste0("Sample size = ",n_responses)) 
+  
+  CARS::wrap_outputs("coding-freq", plot, table)
+}
+
+```
+
+## Can't see your department?
+
+If your department isn't listed here, that means we have fewer than 5 responses. Once we get to that number of responses, you'll be able to see it listed.
