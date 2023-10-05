@@ -9,7 +9,7 @@ output:
 
 library(magrittr)
 
-data <- CARS::get_tidy_data_api()
+data <- CARS::get_tidy_data_api(survey = "1376897")
 divisons <- filter_divisons(data)
 n_responses <- length(divisons)
 
