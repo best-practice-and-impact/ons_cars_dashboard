@@ -1,6 +1,8 @@
 devtools::install("../ons.cars.dashboard")
 source("R/data_cleaning.R")
 source("R/plot.R")
+source("R/ingest.R")
+
 
 rmarkdown::render("rmarkdown/index.rmd", output_file = "../docs/index.html")
 
