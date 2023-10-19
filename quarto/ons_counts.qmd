@@ -1,0 +1,53 @@
+---
+title: "Coding in analysis and research response dashboard"
+format:
+  html:
+    self-contained: true
+    theme: cosmo
+    css: styles.css
+execute:
+  echo: false
+  warning: false
+---
+
+```{r}
+devtools::load_all()
+library(magrittr)
+
+data <- get_tidy_data_api()
+directorate_counts <- table(data$Q5..Which.directorate.do.you.belong.to.) %>% 
+  data.frame()
+n_responses <- sum(directorate_counts$Freq)
+
+directorate_table <- dplyr::filter(directorate_counts, Freq >= 5)
+
+```
+
+## Welcome
+
+Welcome to the Coding in Analysis and Research Survey (CARS) 2023 dashboard. Here you can see our response rate so far, broken down by ONS directorate. CARS is our annual survey on the use of code in government analysis. You can see the 2022 results in our [online publication](https://best-practice-and-impact.github.io/CARS/). 
+
+Last year we got 225 responses from the ONS, but we'd like to do better this year. So far, we've got `r n_responses` responses from ONS. We're aiming for at least 20 from as many directorates as possible, which will allow us to create customised reports for those directorates. If you're interested in seeing this, please promote the survey in your directorate.
+
+
+## Responses by directorate
+
+```{r}
+if (nrow(directorate_table) == 0) {
+  knitr::raw_html("There aren't enough responses yet. Please check later - this page will update once per hour.")
+} else {
+  colnames(directorate_table) <- c("directorate", "Number of respondents")
+
+  plot <- plot_freqs(directorate_table, xlab = "directorate", ylab = "Number of respondents", n = n_responses, font_size = 14, height = 400 + nrow(directorate_table) * 50)
+  
+  table <- kableExtra::kable_styling(knitr::kable(directorate_table)) %>% 
+    kableExtra::add_footnote(paste0("Sample size = ",n_responses)) 
+  
+  CARS::wrap_outputs("coding-freq", plot, table)
+}
+
+```
+
+## Can't see your directorate?
+
+If your directorate isn't listed here, that means we have fewer than 5 responses. Once we get to that number of responses, you'll be able to see it listed.

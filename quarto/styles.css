@@ -1,0 +1,21 @@
+
+.toggle-button {
+  text-decoration: underline;
+}
+
+.toggle-button:hover {
+  background-color: #ffdd00;
+  border-bottom: 4px solid black;
+  color: black;
+}
+
+p > a:hover{
+  background-color: #ffdd00;
+  border-bottom: 4px solid black;
+  color: black;
+}
+
+div {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
