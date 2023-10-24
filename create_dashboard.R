@@ -1,12 +1,12 @@
-devtools::install("../ons.cars.dashboard")
-source("R/data_cleaning.R")
-source("R/plot.R")
-source("R/ingest.R")
+quarto::quarto_render("quarto/ons_counts.qmd", output_file = "docs/ons_counts.html")
 
+# ASPX conversion
 
-rmarkdown::render("rmarkdown/index.rmd", output_file = "../docs/index.html")
+replace_utf8 <- function(x) {
+  x <- gsub("”", "\"", x)
+  x <- gsub("“", "\"", x)
+  x <- gsub("’", "\'", x)
+  x <- gsub("", "link", x)
+}
 
-gert::git_branch_checkout("main")
-gert::git_add("docs/")
-gert::git_commit("Latest data", author = "Jacob <jacob.cole@ons.gov.uk>")
-gert::git_push()
+readr::write_file(replace_utf8(readr::read_file("docs/ons_counts.html")), "docs/ons_counts.aspx")
